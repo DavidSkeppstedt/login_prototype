@@ -16,6 +16,7 @@ You would have to have Go set up correctly ofcourse.
 ### Setting up Go for development
 Follow these links for some pointers.
 [Installation](https://golang.org/doc/install)
+
 [Config](https://golang.org/doc/code.html)
 
 Notice: 
@@ -29,18 +30,18 @@ On OSX/Linux you would do something like:
 sh setup/setup.sh
 ```
 
-This will generate necessary folders and file to the project.
+This will generate necessary folders and files for the project.
 
 ###Config
 ####Database
 Inside the file dbconfig.config put all your config
 for your postgres db. It should follow this convention:
-	*host_ip
-	*port
-	*user
-	*password
-	*dbname
-	*sslmode
+* host_ip
+* port
+* user
+* password
+* dbname
+* sslmode
 
 
 
