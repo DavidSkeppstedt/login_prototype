@@ -24,4 +24,4 @@ _testmain.go
 *.prof
 
 #User added ignores down here
-credentials.txt
+config/
