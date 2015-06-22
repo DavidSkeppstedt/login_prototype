@@ -24,7 +24,7 @@ func init() {
 	*password
 	*dbname
 	*sslmode*/
-	credentials, ferr := ioutil.ReadFile("credentials.txt")
+	credentials, ferr := ioutil.ReadFile("config/dbconfig.config")
 	check(ferr)
 	config := strings.Split(string(credentials), "\n")
 
