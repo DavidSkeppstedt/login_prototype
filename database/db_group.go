@@ -1,4 +1,4 @@
-package main
+package database
 
 func GivenGroupIdFindUsers(id int) (result string, err error) {
 

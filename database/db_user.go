@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ func CreateUser(name string) (result string, err error) {
 	return
 }
 
-func UpdateUserName(id int, name string) (result string, err error) {
+func UpdateUser(id int, name string) (result string, err error) {
 	_, err = Db.Query("UPDATE users SET name=$1 WHERE id=$2", name, id)
 	result = "Updated the user with id " + strconv.Itoa(id)
 	return

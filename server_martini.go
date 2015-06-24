@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./database"
 	"encoding/json"
 	"github.com/go-martini/martini"
 	"net/http"
@@ -52,28 +53,28 @@ func apiV1() string {
 }
 
 func NewUser(params martini.Params) (int, string) {
-	dbQuery, _ := CreateUser(params["name"])
+	dbQuery, _ := database.CreateUser(params["name"])
 	return http.StatusOK, dbQuery
 }
 
 func ListUsers() (int, string) {
 
-	dbQuery, _ := SelectAllUsers()
+	dbQuery, _ := database.SelectAllUsers()
 	return http.StatusOK, dbQuery
 }
 
 func GetUser(params martini.Params, w http.ResponseWriter) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
-	dbQuery, _ := GetUserFromDB(int(id))
+	dbQuery, _ := database.GetUserFromDB(int(id))
 
 	response, err := buildUserResponse(int(id), dbQuery)
-	Check(err)
+	database.Check(err)
 	return http.StatusOK, string(response)
 }
 
 func FindUser(params martini.Params) (int, string) {
 	name := params["name"]
-	dbQuery, _ := SearchUserWithName(name)
+	dbQuery, _ := database.SearchUserWithName(name)
 	return http.StatusOK, dbQuery
 }
 
@@ -81,28 +82,28 @@ func UpdateUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	name := params["name"]
-	dbQuery, _ := UpdateUserName(id, name)
+	dbQuery, _ := database.UpdateUser(id, name)
 	return http.StatusOK, dbQuery
 }
 
 func DeleteUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery, _ := DeleteUserById(id)
+	dbQuery, _ := database.DeleteUserById(id)
 	return http.StatusOK, dbQuery
 }
 
 func ShowGroups(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery, _ := GivenIdFindGroups(id)
+	dbQuery, _ := database.GivenIdFindGroups(id)
 	return http.StatusOK, dbQuery
 }
 
 func ShowUsersInGroup(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery, _ := GivenGroupIdFindUsers(id)
+	dbQuery, _ := database.GivenGroupIdFindUsers(id)
 	return http.StatusOK, dbQuery
 }
 
