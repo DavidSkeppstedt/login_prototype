@@ -1,19 +1,30 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/go-martini/martini"
+	"net/http"
 	"strconv"
 )
 
+type User map[string]string
+
 type Payload struct {
-	data Data
+	Data Data
 }
 
 type Data struct {
+	User User
 }
 
 func main() {
 	m := martini.Classic()
+
+	// map json encoder
+	m.Use(func(w http.ResponseWriter) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	})
+
 	m.Get("/", func() string {
 		return "Hello World!"
 	})
@@ -42,29 +53,28 @@ func apiV1() string {
 
 func NewUser(params martini.Params) (int, string) {
 	dbQuery, _ := CreateUser(params["name"])
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
 func ListUsers() (int, string) {
 
 	dbQuery, _ := SelectAllUsers()
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
-func GetUser(params martini.Params) (int, string) {
-	//auth
-	//db uppslag baserat på id
-	//returnera rimlig sak
-	idParam := params["id"]
-	intParam, _ := strconv.ParseInt(idParam, 10, 10)
-	dbQuery, _ := GetUserFromDB(int(intParam))
-	return 200, dbQuery
+func GetUser(params martini.Params, w http.ResponseWriter) (int, string) {
+	id, _ := strconv.Atoi(params["id"])
+	dbQuery, _ := GetUserFromDB(int(id))
+
+	response, err := buildUserResponse(int(id), dbQuery)
+	Check(err)
+	return http.StatusOK, string(response)
 }
 
 func FindUser(params martini.Params) (int, string) {
 	name := params["name"]
 	dbQuery, _ := SearchUserWithName(name)
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
 func UpdateUser(params martini.Params) (int, string) {
@@ -72,26 +82,36 @@ func UpdateUser(params martini.Params) (int, string) {
 	id = int(id)
 	name := params["name"]
 	dbQuery, _ := UpdateUserName(id, name)
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
 func DeleteUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	dbQuery, _ := DeleteUserById(id)
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
 func ShowGroups(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	dbQuery, _ := GivenIdFindGroups(id)
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
 }
 
 func ShowUsersInGroup(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	dbQuery, _ := GivenGroupIdFindUsers(id)
-	return 200, dbQuery
+	return http.StatusOK, dbQuery
+}
+
+func buildUserResponse(id int, name string) ([]byte, error) {
+	user := make(map[string]string)
+	user["id"] = strconv.Itoa(id)
+	user["name"] = name
+
+	d := Data{user}
+	//p := Payload{d}
+	return json.MarshalIndent(d, "", "  ")
 }
