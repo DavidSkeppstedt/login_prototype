@@ -25,3 +25,10 @@ _testmain.go
 
 #User added ignores down here
 config/
+
+#Vim ignor files
+*~
+*.swp
+*.swo
+
+
