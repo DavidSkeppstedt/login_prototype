@@ -45,6 +45,12 @@ func CreateUser(name string) (result string, err error) {
 	return
 }
 
+func UpdateUserName(id int, name string) (result string, err error) {
+	_, err = db.Query("UPDATE users SET name=$1 WHERE id=$2", name, id)
+	result = "Updated the user with id " + strconv.Itoa(id)
+	return
+}
+
 func SelectAllUsers() (result string, err error) {
 
 	rows, err := db.Query("SELECT * FROM users")

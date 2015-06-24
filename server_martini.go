@@ -23,7 +23,7 @@ func main() {
 		r.Get("/:id", GetUser)
 		r.Get("/list/all", ListUsers)
 		r.Post("/new/:name", NewUser)
-		r.Put("/update/:id", UpdateUser)
+		r.Put("/update/:id/:name", UpdateUser)
 		r.Delete("/delete/:id", DeleteUser)
 		r.Get("/find/:name", FindUser)
 	})
@@ -68,7 +68,11 @@ func FindUser(params martini.Params) (int, string) {
 }
 
 func UpdateUser(params martini.Params) (int, string) {
-	return 501, "501 - Not Implemented"
+	id, _ := strconv.Atoi(params["id"])
+	id = int(id)
+	name := params["name"]
+	dbQuery, _ := UpdateUserName(id, name)
+	return 200, dbQuery
 }
 
 func DeleteUser(params martini.Params) (int, string) {
