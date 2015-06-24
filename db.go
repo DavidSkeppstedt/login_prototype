@@ -35,10 +35,10 @@ func init() {
 		" sslmode=" + config[5]
 
 	Db, err = sql.Open("postgres", dbConfig)
-	check(err)
+	Check(err)
 }
 
-func check(e error) {
+func Check(e error) {
 	if e != nil {
 		log.Fatal(e)
 	}
