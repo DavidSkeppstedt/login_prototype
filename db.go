@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"bufio"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"io/ioutil"
