@@ -25,7 +25,7 @@ func init() {
 	*dbname
 	*sslmode*/
 	credentials, ferr := ioutil.ReadFile("config/dbconfig.config")
-	check(ferr)
+	Check(ferr)
 	config := strings.Split(string(credentials), "\n")
 
 	dbConfig := "host=" + config[0] +
@@ -36,7 +36,7 @@ func init() {
 		" sslmode=" + config[5]
 
 	db, err = sql.Open("postgres", dbConfig)
-	check(err)
+	Check(err)
 }
 
 func CreateUser(name string) (result string, err error) {
@@ -112,7 +112,7 @@ func GivenIdFindGroups(id int) (result string, err error) {
 	return
 }
 
-func check(e error) {
+func Check(e error) {
 	if e != nil {
 		log.Fatal(e)
 	}
