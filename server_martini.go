@@ -32,7 +32,7 @@ func main() {
 		r.Get("/user/list/all/:id", ShowGroups)
 		r.Get("/list/users/all/:id", ShowUsersInGroup)
 	})
-
+	Db.Query("SELECT * FROM users")
 	m.Run()
 }
 

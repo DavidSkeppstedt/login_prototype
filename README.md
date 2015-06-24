@@ -42,6 +42,3 @@ for your postgres db. It should follow this convention:
 * password
 * dbname
 * sslmode
-
-
-
