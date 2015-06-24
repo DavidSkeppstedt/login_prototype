@@ -15,6 +15,7 @@ var (
 
 //init - Init metod run before main.
 func init() {
+	var err error
 	/*
 	*credentials.txt must have the following structure to work:
 	*host_ip
@@ -34,96 +35,75 @@ func init() {
 		" dbname=" + config[4] +
 		" sslmode=" + config[5]
 
-	var err error
 	db, err = sql.Open("postgres", dbConfig)
 	check(err)
 }
 
-func CreateUser(name string) string {
-	db.Query("INSERT INTO users (name) VALUES ($1)", name)
-	return "Created user with name:" + name
+func CreateUser(name string) (result string, err error) {
+	_, err = db.Query("INSERT INTO users (name) VALUES ($1)", name)
+	result = "Created user with name:" + name
+	return
 }
 
-func SelectAllUsers() string {
+func SelectAllUsers() (result string, err error) {
 
 	rows, err := db.Query("SELECT * FROM users")
-	if err != nil {
-		log.Fatal(err)
-	}
-	result := ""
 	for rows.Next() {
 		var in int
 		var st string
 		rows.Scan(&in, &st)
 		result += st + "\n"
 	}
-	return result
+	return
 }
 
-func DeleteUserById(id int) string {
-	db.Query("DELETE FROM users WHERE id = $1", id)
-	return "Delete user with id:" + strconv.Itoa(id)
+func DeleteUserById(id int) (result string, err error) {
+	_, err = db.Query("DELETE FROM users WHERE id = $1", id)
+	result = "Delete user with id:" + strconv.Itoa(id)
+	return
 }
 
-func SearchUserWithName(name string) string {
+func SearchUserWithName(name string) (result string, err error) {
 	rows, err := db.Query("SELECT name FROM users WHERE name LIKE $1 || '%'", name)
-	if err != nil {
-		log.Fatal(err)
-	}
-	result := ""
 	for rows.Next() {
 		var st string
 		rows.Scan(&st)
 		result += st + "\n"
 	}
-	return result
+	return
 }
 
-func GetUserFromDB(id int) string {
+func GetUserFromDB(id int) (result string, err error) {
 	rows, err := db.Query("SELECT name FROM users WHERE id = $1", id)
-	if err != nil {
-		log.Fatal(err)
-	}
 	rows.Next()
-	var username string
-	rows.Scan(&username)
-	return username
+	rows.Scan(&result)
+	return
 }
 
-func GivenGroupIdFindUsers(id int) string {
+func GivenGroupIdFindUsers(id int) (result string, err error) {
 
 	query := "SELECT u.name FROM groups AS g INNER JOIN user_group_relations AS ugr ON g.id = ugr.group_id AND  g.id = $1 INNER JOIN users AS u ON u.id = ugr.user_id"
 
 	rows, err := db.Query(query, id)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	result := ""
 	for rows.Next() {
 		var st string
 		rows.Scan(&st)
 		result += st + "\n"
 	}
-	return result
+	return
 }
 
-func GivenIdFindGroups(id int) string {
+func GivenIdFindGroups(id int) (result string, err error) {
 
 	query := "SELECT g.name FROM users AS u INNER JOIN user_group_relations AS ugr ON u.id = ugr.user_id AND u.id = $1 INNER JOIN groups AS g ON g.id = ugr.group_id"
 
 	rows, err := db.Query(query, id)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	result := ""
 	for rows.Next() {
 		var st string
 		rows.Scan(&st)
 		result += st + "\n"
 	}
-	return result
+	return
 }
 
 func check(e error) {

@@ -32,8 +32,8 @@ func main() {
 		r.Get("/user/list/all/:id", ShowGroups)
 		r.Get("/list/users/all/:id", ShowUsersInGroup)
 	})
-	Db.Query("SELECT * FROM users")
 	m.Run()
+
 }
 
 func apiV1() string {
@@ -41,13 +41,13 @@ func apiV1() string {
 }
 
 func NewUser(params martini.Params) (int, string) {
-	dbQuery := CreateUser(params["name"])
+	dbQuery, _ := CreateUser(params["name"])
 	return 200, dbQuery
 }
 
 func ListUsers() (int, string) {
 
-	dbQuery := SelectAllUsers()
+	dbQuery, _ := SelectAllUsers()
 	return 200, dbQuery
 }
 
@@ -57,14 +57,13 @@ func GetUser(params martini.Params) (int, string) {
 	//returnera rimlig sak
 	idParam := params["id"]
 	intParam, _ := strconv.ParseInt(idParam, 10, 10)
-	dbQuery := GetUserFromDB(int(intParam))
+	dbQuery, _ := GetUserFromDB(int(intParam))
 	return 200, dbQuery
-
 }
 
 func FindUser(params martini.Params) (int, string) {
 	name := params["name"]
-	dbQuery := SearchUserWithName(name)
+	dbQuery, _ := SearchUserWithName(name)
 	return 200, dbQuery
 }
 
@@ -75,20 +74,20 @@ func UpdateUser(params martini.Params) (int, string) {
 func DeleteUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery := DeleteUserById(id)
+	dbQuery, _ := DeleteUserById(id)
 	return 200, dbQuery
 }
 
 func ShowGroups(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery := GivenIdFindGroups(id)
+	dbQuery, _ := GivenIdFindGroups(id)
 	return 200, dbQuery
 }
 
 func ShowUsersInGroup(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery := GivenGroupIdFindUsers(id)
+	dbQuery, _ := GivenGroupIdFindUsers(id)
 	return 200, dbQuery
 }
