@@ -53,8 +53,12 @@ func apiV1() string {
 }
 
 func NewUser(params martini.Params) (int, string) {
-	_ = database.CreateUser(params["name"])
-	return http.StatusOK, "ok"
+	err := database.CreateUser(params["name"])
+	response := "Added user = " + params["name"]
+	if !database.Check(err) {
+		response = "Something went wrong"
+	}
+	return http.StatusOK, response
 }
 
 func ListUsers() (int, string) {
@@ -82,15 +86,23 @@ func UpdateUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	name := params["name"]
-	_ = database.UpdateUser(id, name)
-	return http.StatusOK, "ok"
+	err := database.UpdateUser(id, name)
+	response := "Updated the user with id = " + strconv.Itoa(id)
+	if !database.Check(err) {
+		response = "Something went wrong"
+	}
+	return http.StatusOK, response
 }
 
 func DeleteUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	_ = database.DeleteUserById(id)
-	return http.StatusOK, "ok"
+	err := database.DeleteUserById(id)
+	response := "Deleted the user with id = " + strconv.Itoa(id)
+	if !database.Check(err) {
+		response = "Something went wrong"
+	}
+	return http.StatusOK, response
 }
 
 func ShowGroups(params martini.Params) (int, string) {
