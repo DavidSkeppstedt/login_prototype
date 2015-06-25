@@ -53,8 +53,8 @@ func apiV1() string {
 }
 
 func NewUser(params martini.Params) (int, string) {
-	dbQuery, _ := database.CreateUser(params["name"])
-	return http.StatusOK, dbQuery
+	_ = database.CreateUser(params["name"])
+	return http.StatusOK, "ok"
 }
 
 func ListUsers() (int, string) {
@@ -82,15 +82,15 @@ func UpdateUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
 	name := params["name"]
-	dbQuery, _ := database.UpdateUser(id, name)
-	return http.StatusOK, dbQuery
+	_ = database.UpdateUser(id, name)
+	return http.StatusOK, "ok"
 }
 
 func DeleteUser(params martini.Params) (int, string) {
 	id, _ := strconv.Atoi(params["id"])
 	id = int(id)
-	dbQuery, _ := database.DeleteUserById(id)
-	return http.StatusOK, dbQuery
+	_ = database.DeleteUserById(id)
+	return http.StatusOK, "ok"
 }
 
 func ShowGroups(params martini.Params) (int, string) {

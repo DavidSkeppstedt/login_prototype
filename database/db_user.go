@@ -1,23 +1,23 @@
 package database
 
-import (
-	"strconv"
-)
+import ()
 
-func CreateUser(name string) (result string, err error) {
+func CreateUser(name string) (err error) {
 	_, err = Db.Query("INSERT INTO users (name) VALUES ($1)", name)
-	result = "Created user with name:" + name
 	return
 }
 
-func UpdateUser(id int, name string) (result string, err error) {
+func UpdateUser(id int, name string) (err error) {
 	_, err = Db.Query("UPDATE users SET name=$1 WHERE id=$2", name, id)
-	result = "Updated the user with id " + strconv.Itoa(id)
+	return
+}
+
+func DeleteUserById(id int) (err error) {
+	_, err = Db.Query("DELETE FROM users WHERE id = $1", id)
 	return
 }
 
 func SelectAllUsers() (result string, err error) {
-
 	rows, err := Db.Query("SELECT * FROM users")
 	for rows.Next() {
 		var in int
@@ -25,12 +25,6 @@ func SelectAllUsers() (result string, err error) {
 		rows.Scan(&in, &st)
 		result += st + "\n"
 	}
-	return
-}
-
-func DeleteUserById(id int) (result string, err error) {
-	_, err = Db.Query("DELETE FROM users WHERE id = $1", id)
-	result = "Delete user with id:" + strconv.Itoa(id)
 	return
 }
 
