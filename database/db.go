@@ -38,8 +38,10 @@ func init() {
 	Check(err)
 }
 
-func Check(e error) {
+func Check(e error) bool {
 	if e != nil {
 		log.Fatal(e)
+		return false
 	}
+	return true
 }
