@@ -53,8 +53,12 @@ func apiV1() string {
 }
 
 func NewUser(params martini.Params) (int, string) {
-	err := database.CreateUser(params["name"])
-	response := "Added user = " + params["name"]
+
+	user := make(map[string]string)
+	user["key"] = params["name"]
+
+	err := database.CreateUser(user)
+	response := "Added user = " + user["name"]
 	if !database.Check(err) {
 		response = "Something went wrong"
 	}

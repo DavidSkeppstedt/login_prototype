@@ -2,8 +2,8 @@ package database
 
 import ()
 
-func CreateUser(name string) (err error) {
-	_, err = Db.Query("INSERT INTO users (name) VALUES ($1)", name)
+func CreateUser(user map[string]string) (err error) {
+	_, err = Db.Query("INSERT INTO users (name) VALUES ($1)", user["name"])
 	return
 }
 
